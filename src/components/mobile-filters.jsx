@@ -20,9 +20,13 @@ export function MobileFilters() {
   const availableFruits = filters.types.length === 0 
     ? ALL_FRUITS
     : ALL_FRUITS.filter(fruit => {
-        return products.some(p => 
-          filters.types.includes(p.tipo) && p.fruta === fruit
-        );
+        return products.some(p => {
+          const typeMatch = filters.types.some(t => {
+             if (t === 'Laminas') return p.tipo.includes('Láminas');
+             return p.tipo === t;
+          });
+          return typeMatch && p.fruta === fruit;
+        });
     });
 
   const handleTypeChange = (value) => {

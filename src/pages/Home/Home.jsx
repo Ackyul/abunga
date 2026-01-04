@@ -58,7 +58,7 @@ const Home = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div className="space-y-6 md:order-2">
             <h2 className="text-4xl font-bold text-[#95b721] mb-8">Nuestra Misión</h2>
-            <p className="text-lg text-gray-700 leading-relaxed text-left md:text-justify">
+            <p className="text-lg text-gray-700 leading-relaxed text-right md:text-right">
               Hacer "retumbar" a los paladares arequipeños con snacks saludables, prácticos y de alta calidad elaborados a base de frutas deshidratadas y sus derivados, en constante innovación, promoviendo hábitos de consumo natural con responsabilidad social y medioambiental, fomentando la economía circular.
             </p>
           </div>
