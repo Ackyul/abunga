@@ -31,7 +31,7 @@ const useProductStore = create((set, get) => ({
             if (fruta === 'Piña') newImage = '/f-pina.png';
             else if (fruta === 'Mango') newImage = '/f-mango.png';
             else if (fruta === 'Manzana') newImage = '/f-manzana.png';
-        } else if (p.tipo.includes('Roll')) {
+        } else if (p.tipo.includes('Láminas')) {
              if (fruta === 'Acaí' || p.name.toLowerCase().includes('acai')) newImage = '/r-acai.png'; 
              else if (fruta === 'Maracuyá') newImage = '/r-maracuya.png';
              else if (fruta === 'Cacao') newImage = '/r-cacao.png';
@@ -76,7 +76,7 @@ const useProductStore = create((set, get) => ({
     const { products, filters } = get();
     return products.filter((product) => {
       const typeMatch = filters.types.length === 0 || filters.types.some(filterType => {
-          if (filterType === "Laminas") return product.tipo.includes("Roll");
+          if (filterType === "Laminas") return product.tipo.includes("Láminas");
           return product.tipo === filterType;
       });
       

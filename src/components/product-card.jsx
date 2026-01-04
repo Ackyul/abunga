@@ -16,10 +16,7 @@ function ProductCard({ product }) {
     if (product.tipo === "Fruta" && product.fruta && PRECIOS[product.fruta]) {
        return PRECIOS[product.fruta][selectedWeight] || product.precio;
     }
-    if (product.tipo.includes("Roll")) {
-        if (product.fruta === "Cacao" || product.name.toLowerCase().includes("cacao")) {
-            return 15;
-        }
+    if (product.tipo.includes("Láminas")) {
         return 10;
     }
     return product.precio;

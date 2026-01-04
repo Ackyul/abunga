@@ -15,10 +15,7 @@ export function ProductModal({ product, isOpen, onClose }) {
     if (product.tipo === "Fruta" && product.fruta && PRECIOS[product.fruta]) {
        return PRECIOS[product.fruta][selectedWeight] || product.precio;
     }
-    if (product.tipo.includes("Roll")) {
-        if (product.fruta === "Cacao" || product.name.toLowerCase().includes("cacao")) {
-            return 15;
-        }
+    if (product.tipo.includes("Láminas")) {
         return 10;
     }
     return product.precio;
@@ -54,8 +51,8 @@ export function ProductModal({ product, isOpen, onClose }) {
                 <p className="text-xs md:text-sm font-bold text-gray-500 uppercase tracking-widest">{product.brand}</p>
                 <h2 className="text-2xl md:text-4xl font-extrabold text-gray-900 leading-tight">{product.name}</h2>
                 <p className="text-gray-500 mt-2 md:mt-4 text-xs md:text-base leading-relaxed">
-                    {product.tipo.includes("Roll") 
-                        ? "Deliciosos rollitos de fruta deshidratada 100% natural, sin azúcares añadidos ni conservantes. Perfecta para un snack saludable en cualquier momento del día."
+                    {product.tipo.includes("Láminas") 
+                        ? "Deliciosas láminas de fruta deshidratada 100% natural, sin azúcares añadidos ni conservantes. Perfecta para un snack saludable en cualquier momento del día."
                         : "Deliciosa fruta deshidratada 100% natural, sin azúcares añadidos ni conservantes. Perfecta para un snack saludable en cualquier momento del día."
                     }
                 </p>

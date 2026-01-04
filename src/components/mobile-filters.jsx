@@ -54,12 +54,12 @@ export function MobileFilters() {
               <div className="grid grid-cols-2 gap-3">
                  <div className="flex items-center gap-3 bg-gray-50 p-3 rounded-lg">
                   <Checkbox 
-                    id="mobile-rollos" 
+                    id="mobile-laminas" 
                     className="h-5 w-5"
-                    checked={filters.types.includes('Rollos')}
-                    onCheckedChange={() => handleTypeChange('Rollos')}
+                    checked={filters.types.includes('Laminas')}
+                    onCheckedChange={() => handleTypeChange('Laminas')}
                   />
-                  <Label htmlFor="mobile-rollos" className="text-base font-medium text-gray-700">Rollos</Label>
+                  <Label htmlFor="mobile-laminas" className="text-base font-medium text-gray-700">Láminas</Label>
                 </div>
                 <div className="flex items-center gap-3 bg-gray-50 p-3 rounded-lg">
                   <Checkbox 
