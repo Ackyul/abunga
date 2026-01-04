@@ -14,7 +14,7 @@ export function SidebarFilters() {
   const { filters, setFilter, products } = useProductStore();
 
   const ALL_FRUITS = [
-    "Asaí", "Cacao", "Coco", "Fresa", "Mango", 
+    "Acaí", "Cacao", "Coco", "Fresa", "Mango", 
     "Manzana", "Maracuyá", "Papaya", 
     "Piña", "Plátano", "Sandía", "Tamarindo"
   ];
@@ -65,12 +65,12 @@ export function SidebarFilters() {
           <Collapsible.Content className="space-y-4 pt-2">
             <div className="flex items-center gap-3">
               <Checkbox 
-                id="rollos" 
+                id="laminas" 
                 className="h-6 w-6"
-                checked={filters.types.includes('Rollos')}
-                onCheckedChange={() => handleTypeChange('Rollos')}
+                checked={filters.types.includes('Laminas')}
+                onCheckedChange={() => handleTypeChange('Laminas')}
               />
-              <Label htmlFor="rollos" className="text-lg">Rollos</Label>
+              <Label htmlFor="laminas" className="text-lg">Láminas</Label>
             </div>
             <div className="flex items-center gap-3">
               <Checkbox 

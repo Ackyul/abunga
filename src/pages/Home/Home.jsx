@@ -38,10 +38,10 @@ const Home = () => {
           <div className="space-y-6">
             <h2 className="text-4xl font-bold text-[#95b721] mb-8">Somos:</h2>
             <p className="text-xl text-gray-700 leading-relaxed">
-              Una marca arequipeña que transforma fruta local en snacks deshidratados y rollitos saludables 💚
+              Una marca arequipeña que transforma fruta local en snacks deshidratados y laminas de frutas dehidratadas en rollitos saludables 💚
             </p>
             <p className="text-xl text-gray-700 leading-relaxed">
-              Natural, sostenible y hecho con propósito
+              Natural, sostenible y hecho con propósito.
             </p>
             <div className="pt-8">
               <p className="text-2xl font-semibold text-gray-800">
@@ -58,7 +58,7 @@ const Home = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div className="space-y-6 md:order-2">
             <h2 className="text-4xl font-bold text-[#95b721] mb-8">Nuestra Misión</h2>
-            <p className="text-lg text-gray-700 leading-relaxed">
+            <p className="text-lg text-gray-700 leading-relaxed text-left md:text-justify">
               Hacer "retumbar" a los paladares arequipeños con snacks saludables, prácticos y de alta calidad elaborados a base de frutas deshidratadas y sus derivados, en constante innovación, promoviendo hábitos de consumo natural con responsabilidad social y medioambiental, fomentando la economía circular.
             </p>
           </div>
