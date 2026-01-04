@@ -12,9 +12,9 @@ export function MobileFilters() {
   const { filters, setFilter, products } = useProductStore();
 
   const ALL_FRUITS = [
-    "Asaí", "Cacao", "Coco", "Fresa", "Kiwi", "Mango", 
-    "Manzana", "Maracuyá", "Naranja", "Papaya", 
-    "Pera", "Piña", "Plátano", "Sandía", "Tamarindo", "Toronja"
+    "Asaí", "Cacao", "Coco", "Fresa", "Mango", 
+    "Manzana", "Maracuyá", "Papaya", 
+    "Piña", "Plátano", "Sandía", "Tamarindo"
   ];
 
   const availableFruits = filters.types.length === 0 
