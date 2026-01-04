@@ -38,7 +38,7 @@ const Home = () => {
           <div className="space-y-6">
             <h2 className="text-4xl font-bold text-[#95b721] mb-8">Somos:</h2>
             <p className="text-xl text-gray-700 leading-relaxed">
-              Una marca arequipeña que transforma fruta local en snacks deshidratados y laminas de frutas dehidratadas en rollitos saludables 💚
+              Una marca arequipeña que transforma fruta local en snacks deshidratados y láminas de frutas dehidratadas en rollitos saludables 💚
             </p>
             <p className="text-xl text-gray-700 leading-relaxed">
               Natural, sostenible y hecho con propósito.
