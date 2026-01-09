@@ -32,6 +32,7 @@ const useProductStore = create((set, get) => ({
           else if (fruta === "Mango") newImage = "/f-mango.png";
           else if (fruta === "Manzana") newImage = "/f-manzana.png";
           else if (fruta === "Fresa") newImage = "/f-fresa.png";
+          else if (fruta === "Papaya") newImage = "/f-papaya.png";
         } else if (p.tipo.includes("Láminas")) {
           if (fruta === "Acaí" || p.name.toLowerCase().includes("acai"))
             newImage = "/r-acai.png";
