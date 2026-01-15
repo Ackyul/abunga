@@ -10,7 +10,7 @@ export function ProductModal({ product, isOpen, onClose }) {
   if (!product) return null;
 
   const getPrice = () => {
-    if (product.tipo === "Fruta" && product.fruta && PRECIOS[product.fruta]) {
+    if ((product.tipo === "Fruta" || product.tipo === "Mix") && product.fruta && PRECIOS[product.fruta]) {
        return PRECIOS[product.fruta][selectedWeight] || product.precio;
     }
     if (product.tipo.includes("Láminas")) {
@@ -56,11 +56,14 @@ export function ProductModal({ product, isOpen, onClose }) {
                 </p>
             </div>
 
-            {product.tipo === "Fruta" && (
+            {(product.tipo === "Fruta" || product.tipo === "Mix") && (
                 <div className="space-y-2 md:space-y-4">
                     <p className="text-xs md:text-sm font-bold text-gray-900 uppercase">Selecciona el peso:</p>
                     <div className="flex gap-2 md:gap-4 overflow-x-auto pb-2">
-                        {["50gr", "100gr", "500gr", "1kg"].map((weight) => (
+                        {(product.tipo === "Mix" 
+                            ? ["50gr", "100gr", "250gr", "350gr", "500gr", "1kg"] 
+                            : ["50gr", "100gr", "500gr", "1kg"]
+                        ).map((weight) => (
                             <button 
                                 key={weight}
                                 onClick={() => setSelectedWeight(weight)}
