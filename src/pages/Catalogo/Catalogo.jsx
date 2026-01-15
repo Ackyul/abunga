@@ -42,9 +42,8 @@ const Catalogo = () => {
           <div className="flex-1">
             <Products />
           </div>
-          <div className="hidden xl:block w-96 shrink-0">
+          <div className="hidden xl:block w-72 shrink-0">
              <div className="sticky top-24">
-                <h3 className="text-xl font-bold text-[#95b721] mb-6 text-center">¡Nuevo Mix!</h3>
                 <ProductCard 
                     product={{
                         id: "mixtos-especial",
@@ -55,7 +54,6 @@ const Catalogo = () => {
                         tipo: "Mix",
                         fruta: "Mix"
                     }} 
-                    showActions={true}
                 />
              </div>
           </div>
