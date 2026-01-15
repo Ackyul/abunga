@@ -67,23 +67,23 @@ export function SidebarFilters() {
             </Collapsible.Trigger>
           </div>
           <Collapsible.Content className="space-y-4 pt-2">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center justify-between gap-3">
+              <Label htmlFor="laminas" className="text-lg">Láminas</Label>
               <Checkbox 
                 id="laminas" 
                 className="h-6 w-6"
                 checked={filters.types.includes('Laminas')}
                 onCheckedChange={() => handleTypeChange('Laminas')}
               />
-              <Label htmlFor="laminas" className="text-lg">Láminas</Label>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center justify-between gap-3">
+              <Label htmlFor="fruta-tipo" className="text-lg">Fruta</Label>
               <Checkbox 
                 id="fruta-tipo" 
                 className="h-6 w-6"
                 checked={filters.types.includes('Fruta')}
                 onCheckedChange={() => handleTypeChange('Fruta')}
               />
-              <Label htmlFor="fruta-tipo" className="text-lg">Fruta</Label>
             </div>
           </Collapsible.Content>
         </Collapsible.Root>
@@ -103,16 +103,16 @@ export function SidebarFilters() {
           <Collapsible.Content className="space-y-3 pt-2 pl-2">
              <div className="grid grid-cols-1 gap-3">
                 {availableFruits.map((fruta) => (
-                  <div key={fruta} className="flex items-center gap-3">
+                  <div key={fruta} className="flex items-center justify-between gap-3">
+                    <Label htmlFor={`fruit-${fruta}`} className="text-lg font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                      {fruta}
+                    </Label>
                     <Checkbox 
                       id={`fruit-${fruta}`}
                       className="h-6 w-6"
                       checked={filters.fruits.includes(fruta)}
                       onCheckedChange={() => handleFruitChange(fruta)}
                     />
-                    <Label htmlFor={`fruit-${fruta}`} className="text-lg font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                      {fruta}
-                    </Label>
                   </div>
                 ))}
                 {availableFruits.length === 0 && (
