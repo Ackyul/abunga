@@ -3,8 +3,13 @@ import Products from "../../components/products";
 import ProductCard from "../../components/product-card";
 import { SidebarFilters } from "../../components/sidebar-filters";
 import { Navbar } from "../../components/navbar";
+import { ChevronDown } from "lucide-react";
+import * as Collapsible from "@radix-ui/react-collapsible";
+import { useState } from "react";
 
 const Catalogo = () => {
+  const [isMixOpen, setIsMixOpen] = useState(false);
+
   return (
     <div className="min-h-screen bg-white">
       <header className="bg-[#95b721] pt-8 pb-12 md:pt-14 md:pb-12 flex flex-row justify-between px-4 md:justify-center items-center relative md:gap-4">
@@ -40,6 +45,31 @@ const Catalogo = () => {
             <SidebarFilters />
           </div>
           <div className="flex-1">
+            {/* Mobile Mix Bar */}
+            <div className="xl:hidden mb-6">
+               <Collapsible.Root open={isMixOpen} onOpenChange={setIsMixOpen} className="border border-[#95b721] rounded-xl overflow-hidden bg-white shadow-sm">
+                  <Collapsible.Trigger className="w-full flex items-center justify-between p-4 bg-[#f4fadd] hover:bg-[#ebf3d6] transition-colors">
+                      <span className="font-bold text-[#95b721] text-lg uppercase tracking-wider">¡Mixtos aquí!</span>
+                      <ChevronDown className={`h-5 w-5 text-[#95b721] transition-transform duration-200 ${isMixOpen ? 'rotate-180' : ''}`} />
+                  </Collapsible.Trigger>
+                  <Collapsible.Content className="p-4 flex justify-center bg-white data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp">
+                      <div className="w-full max-w-sm">
+                        <ProductCard 
+                            product={{
+                                id: "mixtos-especial-mobile",
+                                name: "Mix de Frutas Deshidratadas",
+                                image: "/mixtos.png",
+                                price: 25,
+                                brand: "Abunga",
+                                tipo: "Mix",
+                                fruta: "Mix"
+                            }} 
+                        />
+                      </div>
+                  </Collapsible.Content>
+               </Collapsible.Root>
+            </div>
+
             <Products />
           </div>
           <div className="hidden xl:block w-64 shrink-0">
@@ -90,6 +120,4 @@ const Catalogo = () => {
       </footer>
     </div>
   );
-};
-
-export default Catalogo;
+}
