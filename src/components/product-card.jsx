@@ -73,16 +73,22 @@ function ProductCard({ product, showActions = false }) {
               <p className="text-[10px] md:text-xs font-bold text-gray-500 uppercase tracking-widest">{product.brand}</p>
               <h3 className="font-bold text-sm md:text-lg leading-tight line-clamp-2 min-h-[2.5em]">{product.name}</h3>
               {(product.tipo === "Fruta" || product.tipo === "Mix") && (
-                <div className="grid grid-cols-4 md:grid-cols-4 gap-1 md:gap-2 my-2 w-full">
-                  {["50gr", "100gr", "500gr", "1kg"].map((weight) => (
+                <div className={`grid ${product.tipo === 'Mix' ? 'grid-cols-3' : 'grid-cols-4 md:grid-cols-4'} gap-1 md:gap-2 my-2 w-full`}>
+                  {(product.tipo === 'Mix' 
+                    ? ["50gr", "100gr", "250gr", "350gr", "500gr", "1kg"] 
+                    : ["50gr", "100gr", "500gr", "1kg"]
+                  ).map((weight) => (
                     <button 
                       key={weight}
-                      onClick={(e) => { e.stopPropagation(); setSelectedWeight(weight); }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedWeight(weight);
+                      }}
                       className={cn(
-                        "text-[10px] md:text-xs font-bold py-1 px-1 rounded-md transition-colors border whitespace-nowrap flex items-center justify-center",
-                        selectedWeight === weight 
-                          ? "bg-[#95b721] text-white border-[#95b721]" 
-                          : "bg-white text-[#95b721] border-[#95b721] hover:bg-[#ebf3d6]"
+                        "py-1 text-[10px] md:text-xs font-bold rounded-md border transition-all whitespace-nowrap",
+                        selectedWeight === weight
+                        ? "border-[#95b721] bg-[#95b721] text-white shadow-sm" 
+                        : "border-gray-200 text-gray-500 hover:border-[#95b721] hover:text-[#95b721]"
                       )}
                     >
                       {weight}
