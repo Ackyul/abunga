@@ -3,12 +3,12 @@ import { Card, CardContent } from "./ui/card";
 import { cn } from "../lib/utils";
 import { PRECIOS } from "../lib/constants";
 import { ProductModal } from "./product-modal";
-import useCartStore from "../stores/useCartStore";
+// import useCartStore from "../stores/useCartStore";
 
 function ProductCard({ product }) {
   const [selectedWeight, setSelectedWeight] = useState("50gr");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { addToCart, cart, updateQuantity, removeFromCart } = useCartStore();
+  // const { addToCart, cart, updateQuantity, removeFromCart } = useCartStore();
 
   if (!product) return null;
 
@@ -24,34 +24,34 @@ function ProductCard({ product }) {
 
   const displayPrice = getPrice();
 
-  const cartItem = cart.find(
-    (item) => item.id === product.id && item.selectedWeight === selectedWeight
-  );
+  // const cartItem = cart.find(
+  //   (item) => item.id === product.id && item.selectedWeight === selectedWeight
+  // );
 
-  const handleAddToCart = (e) => {
-      e.stopPropagation();
-      addToCart({
-          id: product.id,
-          name: product.name,
-          image: product.image,
-          price: displayPrice,
-          brand: product.brand
-      }, 1, selectedWeight);
-  };
+  // const handleAddToCart = (e) => {
+  //     e.stopPropagation();
+  //     addToCart({
+  //         id: product.id,
+  //         name: product.name,
+  //         image: product.image,
+  //         price: displayPrice,
+  //         brand: product.brand
+  //     }, 1, selectedWeight);
+  // };
 
-  const handleIncrease = (e) => {
-    e.stopPropagation();
-    updateQuantity(product.id, selectedWeight, cartItem.quantity + 1);
-  };
+  // const handleIncrease = (e) => {
+  //   e.stopPropagation();
+  //   updateQuantity(product.id, selectedWeight, cartItem.quantity + 1);
+  // };
 
-  const handleDecrease = (e) => {
-    e.stopPropagation();
-    if (cartItem.quantity > 1) {
-      updateQuantity(product.id, selectedWeight, cartItem.quantity - 1);
-    } else {
-      removeFromCart(product.id, selectedWeight);
-    }
-  };
+  // const handleDecrease = (e) => {
+  //   e.stopPropagation();
+  //   if (cartItem.quantity > 1) {
+  //     updateQuantity(product.id, selectedWeight, cartItem.quantity - 1);
+  //   } else {
+  //     removeFromCart(product.id, selectedWeight);
+  //   }
+  // };
 
 
   return (
@@ -92,30 +92,7 @@ function ProductCard({ product }) {
               )}
               <p className="text-xl md:text-3xl font-black text-[#95b721]">S/ {displayPrice}</p>
               
-              {cartItem ? (
-                 <div className="flex items-center justify-between bg-gray-100 rounded-full p-1" onClick={(e) => e.stopPropagation()}>
-                    <button 
-                        onClick={handleDecrease}
-                        className="h-8 w-8 flex items-center justify-center bg-white rounded-full shadow-sm font-bold hover:bg-gray-50 text-black"
-                    >
-                        -
-                    </button>
-                    <span className="font-bold text-lg">{cartItem.quantity}</span>
-                     <button 
-                        onClick={handleIncrease}
-                        className="h-8 w-8 flex items-center justify-center bg-white rounded-full shadow-sm font-bold hover:bg-gray-50 text-black"
-                    >
-                        +
-                    </button>
-                 </div>
-              ) : (
-                <button
-                    onClick={handleAddToCart}
-                    className="w-full bg-black text-white font-bold py-2 rounded-xl text-xs md:text-sm hover:bg-gray-800 transition-colors"
-                >
-                    Añadir 
-                </button>
-              )}
+              {/* Add button removed */ }
           </div>
         </CardContent>
       </Card>
