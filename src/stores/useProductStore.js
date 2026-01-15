@@ -5,7 +5,7 @@ const useProductStore = create((set, get) => ({
   products: [],
   loading: false,
   error: null,
-  visibleCount: 8,
+  visibleCount: 10,
 
   validateProducts: async () => {
     const { products } = get();
@@ -73,7 +73,7 @@ const useProductStore = create((set, get) => ({
           ...state.filters,
           [category]: newFilters,
         },
-        visibleCount: 8,
+        visibleCount: 10,
       };
     }),
 

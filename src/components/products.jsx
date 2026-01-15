@@ -19,7 +19,7 @@ function Products() {
   }, [getProducts]);
 
   const handleLoadMore = () => {
-    setVisibleCount(4);
+    setVisibleCount(5);
   };
 
   if (loading) {
