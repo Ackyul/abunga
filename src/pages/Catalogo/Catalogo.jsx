@@ -157,3 +157,5 @@ const Catalogo = () => {
     </div>
   );
 }
+
+export default Catalogo;
