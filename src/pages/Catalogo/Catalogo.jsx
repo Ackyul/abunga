@@ -42,13 +42,8 @@ const Catalogo = () => {
         <div className="flex flex-col md:flex-row gap-8">
           <div className="md:hidden">
             <MobileFilters />
-          </div>
-          <div className="hidden md:block">
-            <SidebarFilters />
-          </div>
-          <div className="flex-1">
-            {/* Mobile Mix Bar */}
-            <div className="xl:hidden mb-6">
+            {/* Mobile Mix Bar (moved here for mobile) */}
+            <div className="mb-6">
                <Collapsible.Root open={isMixOpen} onOpenChange={setIsMixOpen} className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
                   <Collapsible.Trigger asChild>
                     <Button variant="ghost" className="w-full flex items-center justify-between p-4 h-auto hover:bg-gray-50 text-gray-900">
@@ -64,6 +59,40 @@ const Catalogo = () => {
                         <ProductCard 
                             product={{
                                 id: "mixtos-especial-mobile",
+                                name: "Mix de Frutas Deshidratadas",
+                                image: "/mixtos.png",
+                                price: 25,
+                                brand: "Abunga",
+                                tipo: "Mix",
+                                fruta: "Mix"
+                            }} 
+                        />
+                      </div>
+                  </Collapsible.Content>
+               </Collapsible.Root>
+            </div>
+          </div>
+          <div className="hidden md:block">
+            <SidebarFilters />
+          </div>
+          <div className="flex-1">
+            {/* Tablet Mix Bar (visible only on md/lg) */}
+            <div className="hidden md:block xl:hidden mb-6">
+               <Collapsible.Root open={isMixOpen} onOpenChange={setIsMixOpen} className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                  <Collapsible.Trigger asChild>
+                    <Button variant="ghost" className="w-full flex items-center justify-between p-4 h-auto hover:bg-gray-50 text-gray-900">
+                      <div className="flex items-center gap-2">
+                        <Sparkles className="h-5 w-5 text-[#95b721]" />
+                        <span className="text-lg font-bold">¡Mixtos aquí!</span>
+                      </div>
+                      <ChevronDown className={cn("h-5 w-5 text-gray-500 transition-transform duration-200", isMixOpen ? "transform rotate-180" : "")} />
+                    </Button>
+                  </Collapsible.Trigger>
+                  <Collapsible.Content className="border-t border-gray-100 p-4 flex justify-center bg-white data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp">
+                      <div className="w-full max-w-sm">
+                        <ProductCard 
+                            product={{
+                                id: "mixtos-especial-tablet",
                                 name: "Mix de Frutas Deshidratadas",
                                 image: "/mixtos.png",
                                 price: 25,
