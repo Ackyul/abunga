@@ -3,12 +3,10 @@ import { Dialog, DialogContent } from "./ui/dialog";
 import { PRECIOS } from "../lib/constants";
 import { cn } from "../lib/utils";
 import { Button } from "./ui/button";
-import useCartStore from "../stores/useCartStore";
+// import useCartStore from "../stores/useCartStore";
 
 export function ProductModal({ product, isOpen, onClose }) {
   const [selectedWeight, setSelectedWeight] = useState("50gr");
-  const addToCart = useCartStore((state) => state.addToCart);
-
   if (!product) return null;
 
   const getPrice = () => {
@@ -23,16 +21,16 @@ export function ProductModal({ product, isOpen, onClose }) {
 
   const displayPrice = getPrice();
 
-  const handleAddToCart = () => {
-        addToCart({
-          id: product.id,
-          name: product.name,
-          image: product.image,
-          price: displayPrice,
-          brand: product.brand
-      }, 1, selectedWeight);
-      onClose(false);
-  };
+  // const handleAddToCart = () => {
+  //       addToCart({
+  //           id: product.id,
+  //           name: product.name,
+  //           image: product.image,
+  //           price: displayPrice,
+  //           brand: product.brand
+  //       }, 1, selectedWeight);
+  //       onClose(false);
+  // };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -87,12 +85,7 @@ export function ProductModal({ product, isOpen, onClose }) {
                 </div>
             </div>
             
-             <Button 
-                onClick={handleAddToCart}
-                className="w-full bg-black hover:bg-gray-800 text-white font-bold py-4 md:py-6 text-lg md:text-xl rounded-full shadow-xl"
-             >
-                 Añadir a cotización
-             </Button>
+             {/* Button removed */}
 
         </div>
       </DialogContent>
