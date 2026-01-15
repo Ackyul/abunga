@@ -31,7 +31,7 @@ const Catalogo = () => {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8 max-w-[1400px]">
+      <main className="container mx-auto px-4 py-8 max-w-[95%]">
         <div className="flex flex-col md:flex-row gap-8">
           <div className="md:hidden">
             <MobileFilters />

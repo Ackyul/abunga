@@ -36,7 +36,7 @@ function Products() {
 
   return (
     <div className="flex flex-col items-center space-y-8">
-        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 w-full">
+        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 md:gap-6 w-full">
         {visibleProducts.map((product) => (
             <ProductCard key={product.id} product={product} />
         ))}
