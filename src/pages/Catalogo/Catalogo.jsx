@@ -42,7 +42,7 @@ const Catalogo = () => {
           <div className="flex-1">
             <Products />
           </div>
-          <div className="hidden xl:block w-72 shrink-0">
+          <div className="hidden xl:block w-64 shrink-0">
              <div className="sticky top-24">
                 <ProductCard 
                     product={{

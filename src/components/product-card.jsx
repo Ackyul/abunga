@@ -13,7 +13,7 @@ function ProductCard({ product, showActions = false }) {
   if (!product) return null;
 
   const getPrice = () => {
-    if (product.tipo === "Fruta" && product.fruta && PRECIOS[product.fruta]) {
+    if ((product.tipo === "Fruta" || product.tipo === "Mix") && product.fruta && PRECIOS[product.fruta]) {
        return PRECIOS[product.fruta][selectedWeight] || product.precio;
     }
     if (product.tipo.includes("Láminas")) {
@@ -72,7 +72,7 @@ function ProductCard({ product, showActions = false }) {
           <div className="mt-auto space-y-2">
               <p className="text-[10px] md:text-xs font-bold text-gray-500 uppercase tracking-widest">{product.brand}</p>
               <h3 className="font-bold text-sm md:text-lg leading-tight line-clamp-2 min-h-[2.5em]">{product.name}</h3>
-              {product.tipo === "Fruta" && (
+              {(product.tipo === "Fruta" || product.tipo === "Mix") && (
                 <div className="grid grid-cols-4 md:grid-cols-4 gap-1 md:gap-2 my-2 w-full">
                   {["50gr", "100gr", "500gr", "1kg"].map((weight) => (
                     <button 
