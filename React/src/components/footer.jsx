@@ -1,8 +1,8 @@
 const Footer = () => {
   return (
-    <footer className="bg-[#95b721] text-white py-8 mt-auto">
-      <div className="container mx-auto px-4 max-w-6xl">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+    <footer className="bg-linear-to-b from-[#8ba91f] to-[#95b721] text-white py-12 mt-auto border-t border-[#8ba91f]/50">
+      <div className="container mx-auto px-6 max-w-6xl">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 items-center">
           <div>
             <h3 className="text-2xl font-['Capriola'] mb-2 text-white">abunga</h3>
             <p className="text-sm text-white/80">Snacks naturales de Arequipa</p>

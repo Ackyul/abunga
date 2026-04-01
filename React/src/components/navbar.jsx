@@ -19,10 +19,10 @@ export function Navbar() {
           key={link.path}
           to={link.path}
           className={cn(
-            "px-3 py-2 md:px-6 md:py-3 rounded-full font-bold text-xs md:text-lg transition-all uppercase",
+            "px-4 py-2 md:px-6 md:py-2.5 rounded-full font-bold text-xs md:text-sm transition-all duration-300 uppercase tracking-wider",
             location.pathname === link.path
-              ? "bg-white text-[#95b721] shadow-md"
-              : "text-white hover:bg-white/20"
+              ? "bg-white/95 text-[#95b721] shadow-lg shadow-black/10 backdrop-blur-sm"
+              : "text-white/90 hover:text-white hover:bg-white/20 hover:shadow-sm"
           )}
         >
           {link.label}
