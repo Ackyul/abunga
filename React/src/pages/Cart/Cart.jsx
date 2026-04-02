@@ -24,8 +24,24 @@ const Cart = () => {
             });
 
             const data = await response.json();
-            
+
             if (data.url) {
+                const token = localStorage.getItem("token");
+                if (token) {
+                    try {
+                        await fetch(`${apiUrl}/api/orders`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${token}`
+                            },
+                            body: JSON.stringify({ cartItems: cart })
+                        });
+                    } catch {
+                        // stripe
+                    }
+                }
+                clearCart();
                 window.location.href = data.url;
             } else {
                 throw new Error("No se pudo iniciar la sesión de Stripe");
