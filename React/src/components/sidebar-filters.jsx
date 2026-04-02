@@ -13,25 +13,16 @@ export function SidebarFilters() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const { filters, setFilter, products } = useProductStore();
 
-  const ALL_FRUITS = [
-    "Acaí", "Cacao", "Coco", "Fresa", "Mango", 
-    "Manzana", "Maracuyá", "Papaya", 
-    "Piña", "Plátano", "Sandía", "Tamarindo"
-  ];
+  // Extraer tipos dinámicamente asegurando que sean únicos y no nulos
+  const availableTypes = Array.from(new Set(products.map(p => p.tipo).filter(t => t && t !== "Mix"))).sort();
 
-  const availableFruits = filters.types.length === 0 
-    ? ALL_FRUITS
-    : ALL_FRUITS.filter(fruit => {
-        return products.some(p => {
-          const typeMatch = filters.types.some(t => {
-             if (t === 'Laminas') return p.tipo.includes('Láminas');
-             return p.tipo === t;
-          });
-          return typeMatch && p.fruta === fruit;
-        });
-    });
-
-
+  // Extraer frutas dinámicamente de los productos filtrados por tipo
+  const availableFruits = Array.from(new Set(
+    products
+      .filter(p => filters.types.length === 0 || filters.types.includes(p.tipo))
+      .map(p => p.fruta)
+      .filter(f => f && f !== "Mix")
+  )).sort();
 
   const handleTypeChange = (value) => {
     setFilter('types', value);
@@ -67,24 +58,20 @@ export function SidebarFilters() {
             </Collapsible.Trigger>
           </div>
           <Collapsible.Content className="space-y-4 pt-2">
-            <div className="flex items-center justify-between gap-3">
-              <Label htmlFor="laminas" className="text-lg">Láminas</Label>
-              <Checkbox 
-                id="laminas" 
-                className="h-6 w-6"
-                checked={filters.types.includes('Laminas')}
-                onCheckedChange={() => handleTypeChange('Laminas')}
-              />
-            </div>
-            <div className="flex items-center justify-between gap-3">
-              <Label htmlFor="fruta-tipo" className="text-lg">Fruta</Label>
-              <Checkbox 
-                id="fruta-tipo" 
-                className="h-6 w-6"
-                checked={filters.types.includes('Fruta')}
-                onCheckedChange={() => handleTypeChange('Fruta')}
-              />
-            </div>
+            {availableTypes.map((type) => (
+              <div key={type} className="flex items-center justify-between gap-3">
+                <Label htmlFor={`type-${type}`} className="text-lg">{type}</Label>
+                <Checkbox 
+                  id={`type-${type}`}
+                  className="h-6 w-6"
+                  checked={filters.types.includes(type)}
+                  onCheckedChange={() => handleTypeChange(type)}
+                />
+              </div>
+            ))}
+            {availableTypes.length === 0 && (
+               <p className="text-gray-400 text-sm italic">No hay tipos disponibles.</p>
+            )}
           </Collapsible.Content>
         </Collapsible.Root>
         

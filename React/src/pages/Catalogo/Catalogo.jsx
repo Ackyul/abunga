@@ -1,19 +1,12 @@
 import { MobileFilters } from "../../components/mobile-filters";
 import Products from "../../components/products";
-import ProductCard from "../../components/product-card";
 import { SidebarFilters } from "../../components/sidebar-filters";
 import { Navbar } from "../../components/navbar";
-import { ChevronDown, Sparkles } from "lucide-react";
-import * as Collapsible from "@radix-ui/react-collapsible";
-import { useState } from "react";
-import { Button } from "../../components/ui/button";
-import { cn } from "../../lib/utils";
 
 const Catalogo = () => {
-  const [isMixOpen, setIsMixOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white flex flex-col">
       <header className="bg-[#95b721] pt-8 pb-12 md:pt-14 md:pb-12 flex flex-row justify-between px-4 md:justify-center items-center relative md:gap-4">
         <div className="relative md:absolute md:left-8 md:top-1/2 md:transform md:-translate-y-1/2 z-10 shrink-0">
           <img 
@@ -38,90 +31,16 @@ const Catalogo = () => {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8 max-w-[95%]">
+      <main className="container mx-auto px-4 py-8 max-w-[95%] flex-1">
         <div className="flex flex-col md:flex-row gap-8">
           <div className="md:hidden">
             <MobileFilters />
-            {/* Mobile Mix Bar (moved here for mobile) */}
-            <div className="mb-6">
-               <Collapsible.Root open={isMixOpen} onOpenChange={setIsMixOpen} className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                  <Collapsible.Trigger asChild>
-                    <Button variant="ghost" className="w-full flex items-center justify-between p-4 h-auto hover:bg-gray-50 text-gray-900">
-                      <div className="flex items-center gap-2">
-                        <Sparkles className="h-5 w-5 text-[#95b721]" />
-                        <span className="text-lg font-bold">¡Mixtos aquí!</span>
-                      </div>
-                      <ChevronDown className={cn("h-5 w-5 text-gray-500 transition-transform duration-200", isMixOpen ? "transform rotate-180" : "")} />
-                    </Button>
-                  </Collapsible.Trigger>
-                  <Collapsible.Content className="border-t border-gray-100 p-4 flex justify-center bg-white data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp">
-                      <div className="w-full max-w-sm">
-                        <ProductCard 
-                            product={{
-                                id: "mixtos-especial-mobile",
-                                name: "Mix de Frutas Deshidratadas",
-                                image: "/mixtos.png",
-                                price: 25,
-                                brand: "Abunga",
-                                tipo: "Mix",
-                                fruta: "Mix"
-                            }} 
-                        />
-                      </div>
-                  </Collapsible.Content>
-               </Collapsible.Root>
-            </div>
           </div>
           <div className="hidden md:block">
             <SidebarFilters />
           </div>
           <div className="flex-1">
-            {/* Tablet Mix Bar (visible only on md/lg) */}
-            <div className="hidden md:block xl:hidden mb-6">
-               <Collapsible.Root open={isMixOpen} onOpenChange={setIsMixOpen} className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                  <Collapsible.Trigger asChild>
-                    <Button variant="ghost" className="w-full flex items-center justify-between p-4 h-auto hover:bg-gray-50 text-gray-900">
-                      <div className="flex items-center gap-2">
-                        <Sparkles className="h-5 w-5 text-[#95b721]" />
-                        <span className="text-lg font-bold">¡Mixtos aquí!</span>
-                      </div>
-                      <ChevronDown className={cn("h-5 w-5 text-gray-500 transition-transform duration-200", isMixOpen ? "transform rotate-180" : "")} />
-                    </Button>
-                  </Collapsible.Trigger>
-                  <Collapsible.Content className="border-t border-gray-100 p-4 flex justify-center bg-white data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp">
-                      <div className="w-full max-w-sm">
-                        <ProductCard 
-                            product={{
-                                id: "mixtos-especial-tablet",
-                                name: "Mix de Frutas Deshidratadas",
-                                image: "/mixtos.png",
-                                price: 25,
-                                brand: "Abunga",
-                                tipo: "Mix",
-                                fruta: "Mix"
-                            }} 
-                        />
-                      </div>
-                  </Collapsible.Content>
-               </Collapsible.Root>
-            </div>
-
             <Products />
-          </div>
-          <div className="hidden xl:block w-64 shrink-0">
-             <div className="sticky top-24">
-                <ProductCard 
-                    product={{
-                        id: "mixtos-especial",
-                        name: "Mix de Frutas Deshidratadas",
-                        image: "/mixtos.png",
-                        price: 25,
-                        brand: "Abunga",
-                        tipo: "Mix",
-                        fruta: "Mix"
-                    }} 
-                />
-             </div>
           </div>
         </div>
       </main>

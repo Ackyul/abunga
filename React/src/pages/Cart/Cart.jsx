@@ -4,9 +4,38 @@ import { Link } from "react-router-dom";
 import { Trash2 } from "lucide-react";
 import { Button } from "../../components/ui/button";
 import { Navbar } from "../../components/navbar";
+import { useState } from "react";
+import { toast } from "sonner";
 
 const Cart = () => {
     const { cart, removeFromCart, updateQuantity, getTotalPrice, clearCart } = useCartStore();
+    const [isCheckingOut, setIsCheckingOut] = useState(false);
+
+    const handleCheckout = async () => {
+        setIsCheckingOut(true);
+        try {
+            const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
+            const response = await fetch(`${apiUrl}/api/stripe/checkout`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ cartItems: cart })
+            });
+
+            const data = await response.json();
+            
+            if (data.url) {
+                window.location.href = data.url;
+            } else {
+                throw new Error("No se pudo iniciar la sesión de Stripe");
+            }
+        } catch (error) {
+            console.error("Error al procesar pago:", error);
+            toast.error("Hubo un error al procesar tu pago. Inténtalo de nuevo.");
+            setIsCheckingOut(false);
+        }
+    };
 
     if (cart.length === 0) {
         return (
@@ -20,7 +49,7 @@ const Cart = () => {
                         />
                     </div>
                     <div className="bg-white px-8 py-3 md:px-12 rounded-2xl shadow-sm border-2 border-black/10 z-10 mx-4 hidden md:block">
-                        <h1 className="text-2xl md:text-3xl font-bold tracking-wider text-black uppercase text-center">Tu Cotización</h1>
+                        <h1 className="text-2xl md:text-3xl font-bold tracking-wider text-black uppercase text-center">Tu Carrito</h1>
                     </div>
                     <Navbar />
                     <div className="absolute bottom-0 left-0 right-0 flex flex-col">
@@ -32,7 +61,7 @@ const Cart = () => {
 
                 <div className="flex-1 flex flex-col items-center justify-center p-4">
                     <div className="bg-white p-8 rounded-3xl shadow-lg border-2 border-dashed border-gray-300 text-center max-w-md w-full">
-                        <h2 className="text-3xl font-extrabold text-gray-900 mb-4">Tu cotización está vacía</h2>
+                        <h2 className="text-3xl font-extrabold text-gray-900 mb-4">Tu carrito está vacío</h2>
                         <p className="text-gray-500 mb-8 text-lg">Parece que aún no has añadido ninguna delicia natural.</p>
                         <Link to="/catalogo">
                             <Button className="w-full bg-[#95b721] hover:bg-[#84a31d] text-white font-bold py-4 text-xl rounded-full shadow-md">
@@ -58,7 +87,7 @@ const Cart = () => {
                 </div>
 
                 <div className="bg-white px-8 py-3 md:px-12 rounded-2xl shadow-sm border-2 border-black/10 z-10 mx-4 hidden md:block">
-                    <h1 className="text-2xl md:text-3xl font-bold tracking-wider text-black uppercase text-center">Tu Cotización</h1>
+                    <h1 className="text-2xl md:text-3xl font-bold tracking-wider text-black uppercase text-center">Tu Carrito</h1>
                 </div>
                 
                 <Navbar />
@@ -139,10 +168,18 @@ const Cart = () => {
 
 
                              <button
+                                onClick={handleCheckout}
+                                disabled={isCheckingOut}
+                                className={`w-full bg-[#635BFF] text-white font-bold py-4 rounded-xl text-lg hover:bg-[#4a42e5] transition-colors shadow-md mb-4 flex items-center justify-center gap-2 ${isCheckingOut ? 'opacity-70 cursor-not-allowed' : ''}`}
+                             >
+                                {isCheckingOut ? "Redirigiendo..." : "Pagar con Stripe"}
+                             </button>
+
+                             <button
                                 onClick={clearCart}
                                 className="w-full text-red-500 font-bold py-2 text-sm hover:underline"
                             >
-                                Vaciar Cotización
+                                Vaciar Carrito
                             </button>
                         </div>
                     </div>

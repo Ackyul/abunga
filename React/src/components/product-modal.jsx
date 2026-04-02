@@ -1,17 +1,24 @@
 import { useState } from "react";
 import { Dialog, DialogContent } from "./ui/dialog";
-import { PRECIOS } from "../lib/constants";
 import { cn } from "../lib/utils";
 import { Button } from "./ui/button";
 // import useCartStore from "../stores/useCartStore";
 
 export function ProductModal({ product, isOpen, onClose }) {
   const [selectedWeight, setSelectedWeight] = useState("50gr");
+  const [prevProduct, setPrevProduct] = useState(product);
+
+  if (product?.id !== prevProduct?.id) {
+    setPrevProduct(product);
+    setSelectedWeight(product?.variants?.length > 0 ? product.variants[0].weight : "50gr");
+  }
+
   if (!product) return null;
 
   const getPrice = () => {
-    if ((product.tipo === "Fruta" || product.tipo === "Mix") && product.fruta && PRECIOS[product.fruta]) {
-       return PRECIOS[product.fruta][selectedWeight] || product.precio;
+    if (product.variants?.length > 0) {
+        const variant = product.variants.find(v => v.weight === selectedWeight);
+        if (variant) return variant.price;
     }
     if (product.tipo.includes("Láminas")) {
         return 10;
@@ -56,25 +63,22 @@ export function ProductModal({ product, isOpen, onClose }) {
                 </p>
             </div>
 
-            {(product.tipo === "Fruta" || product.tipo === "Mix") && (
+            {product.variants?.length > 0 && (
                 <div className="space-y-2 md:space-y-4">
                     <p className="text-xs md:text-sm font-bold text-gray-900 uppercase">Selecciona el peso:</p>
                     <div className="flex gap-2 md:gap-4 overflow-x-auto pb-2">
-                        {(product.tipo === "Mix" 
-                            ? ["50gr", "100gr", "250gr", "350gr", "500gr", "1kg"] 
-                            : ["50gr", "100gr", "500gr", "1kg"]
-                        ).map((weight) => (
+                        {product.variants.map((v) => (
                             <button 
-                                key={weight}
-                                onClick={() => setSelectedWeight(weight)}
+                                key={v.weight}
+                                onClick={() => setSelectedWeight(v.weight)}
                                 className={cn(
                                     "flex-1 py-2 md:py-4 text-sm md:text-xl font-bold rounded-xl md:rounded-2xl border-2 transition-all whitespace-nowrap min-w-[80px]",
-                                    selectedWeight === weight
+                                    selectedWeight === v.weight
                                     ? "border-[#95b721] bg-[#95b721] text-white shadow-lg scale-105" 
                                     : "border-gray-200 text-gray-500 hover:border-[#95b721] hover:text-[#95b721]"
                                 )}
                             >
-                                {weight}
+                                {v.weight}
                             </button>
                         ))}
                     </div>

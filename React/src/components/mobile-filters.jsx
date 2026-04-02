@@ -11,23 +11,14 @@ export function MobileFilters() {
   const [isOpen, setIsOpen] = useState(false);
   const { filters, setFilter, products } = useProductStore();
 
-  const ALL_FRUITS = [
-    "Asaí", "Cacao", "Coco", "Fresa", "Mango", 
-    "Manzana", "Maracuyá", "Papaya", 
-    "Piña", "Plátano", "Sandía", "Tamarindo"
-  ];
+  const availableTypes = Array.from(new Set(products.map(p => p.tipo).filter(t => t && t !== "Mix"))).sort();
 
-  const availableFruits = filters.types.length === 0 
-    ? ALL_FRUITS
-    : ALL_FRUITS.filter(fruit => {
-        return products.some(p => {
-          const typeMatch = filters.types.some(t => {
-             if (t === 'Laminas') return p.tipo.includes('Láminas');
-             return p.tipo === t;
-          });
-          return typeMatch && p.fruta === fruit;
-        });
-    });
+  const availableFruits = Array.from(new Set(
+    products
+      .filter(p => filters.types.length === 0 || filters.types.includes(p.tipo))
+      .map(p => p.fruta)
+      .filter(f => f && f !== "Mix")
+  )).sort();
 
   const handleTypeChange = (value) => {
     setFilter('types', value);
@@ -56,24 +47,20 @@ export function MobileFilters() {
             <div className="space-y-3">
               <h3 className="font-bold text-gray-900 text-base">Tipo</h3>
               <div className="grid grid-cols-2 gap-3">
-                 <div className="flex items-center gap-3 bg-gray-50 p-3 rounded-lg">
-                  <Checkbox 
-                    id="mobile-laminas" 
-                    className="h-5 w-5"
-                    checked={filters.types.includes('Laminas')}
-                    onCheckedChange={() => handleTypeChange('Laminas')}
-                  />
-                  <Label htmlFor="mobile-laminas" className="text-base font-medium text-gray-700">Láminas</Label>
-                </div>
-                <div className="flex items-center gap-3 bg-gray-50 p-3 rounded-lg">
-                  <Checkbox 
-                    id="mobile-fruta" 
-                    className="h-5 w-5"
-                    checked={filters.types.includes('Fruta')}
-                    onCheckedChange={() => handleTypeChange('Fruta')}
-                  />
-                  <Label htmlFor="mobile-fruta" className="text-base font-medium text-gray-700">Fruta</Label>
-                </div>
+                {availableTypes.map((type) => (
+                  <div key={type} className="flex items-center gap-3 bg-gray-50 p-3 rounded-lg">
+                    <Checkbox 
+                      id={`mobile-type-${type}`}
+                      className="h-5 w-5"
+                      checked={filters.types.includes(type)}
+                      onCheckedChange={() => handleTypeChange(type)}
+                    />
+                    <Label htmlFor={`mobile-type-${type}`} className="text-base font-medium text-gray-700">{type}</Label>
+                  </div>
+                ))}
+                {availableTypes.length === 0 && (
+                   <p className="text-gray-400 text-sm italic col-span-2">No hay tipos disponibles.</p>
+                )}
               </div>
             </div>
 

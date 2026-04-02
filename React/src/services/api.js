@@ -1,5 +1,6 @@
 export const fetchProducts = async () => {
-  const response = await fetch("https://6952d479a319a928023a15f1.mockapi.io/Productos");
+  const url = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api/products` : "http://localhost:3000/api/products";
+  const response = await fetch(url);
   if (!response.ok) {
     throw new Error("Error al cargar los productos");
   }

@@ -1,20 +1,28 @@
 import { useState } from "react";
 import { Card, CardContent } from "./ui/card";
 import { cn } from "../lib/utils";
-import { PRECIOS } from "../lib/constants";
+import { toast } from 'sonner';
+
 import { ProductModal } from "./product-modal";
 import useCartStore from "../stores/useCartStore";
 
-function ProductCard({ product, showActions = false }) {
+function ProductCard({ product }) {
   const [selectedWeight, setSelectedWeight] = useState("50gr");
+  const [prevProduct, setPrevProduct] = useState(product);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { addToCart, cart, updateQuantity, removeFromCart } = useCartStore();
+
+  if (product?.id !== prevProduct?.id) {
+    setPrevProduct(product);
+    setSelectedWeight(product?.variants?.length > 0 ? product.variants[0].weight : "50gr");
+  }
 
   if (!product) return null;
 
   const getPrice = () => {
-    if ((product.tipo === "Fruta" || product.tipo === "Mix") && product.fruta && PRECIOS[product.fruta]) {
-       return PRECIOS[product.fruta][selectedWeight] || product.precio;
+    if (product.variants?.length > 0) {
+        const variant = product.variants.find(v => v.weight === selectedWeight);
+        if (variant) return variant.price;
     }
     if (product.tipo.includes("Láminas")) {
         return 10;
@@ -30,6 +38,11 @@ function ProductCard({ product, showActions = false }) {
 
   const handleAddToCart = (e) => {
       e.stopPropagation();
+      const token = localStorage.getItem("token");
+      if (!token) {
+        toast.warning("Por favor, inicia sesión en 'Cuenta' para empezar a comprar.");
+        return;
+      }
       addToCart({
           id: product.id,
           name: product.name,
@@ -41,6 +54,11 @@ function ProductCard({ product, showActions = false }) {
 
   const handleIncrease = (e) => {
     e.stopPropagation();
+    const token = localStorage.getItem("token");
+    if (!token) {
+       toast.warning("Por favor, inicia sesión para añadir más al carrito.");
+       return;
+    }
     updateQuantity(product.id, selectedWeight, cartItem.quantity + 1);
   };
 
@@ -72,33 +90,30 @@ function ProductCard({ product, showActions = false }) {
           <div className="mt-auto space-y-2">
               <p className="text-[10px] md:text-xs font-bold text-gray-500 uppercase tracking-widest">{product.brand}</p>
               <h3 className="font-bold text-sm md:text-lg leading-tight line-clamp-2 min-h-[2.5em]">{product.name}</h3>
-              {(product.tipo === "Fruta" || product.tipo === "Mix") && (
-                <div className={`grid ${product.tipo === 'Mix' ? 'grid-cols-3' : 'grid-cols-4 md:grid-cols-4'} gap-1 md:gap-2 my-2 w-full`}>
-                  {(product.tipo === 'Mix' 
-                    ? ["50gr", "100gr", "250gr", "350gr", "500gr", "1kg"] 
-                    : ["50gr", "100gr", "500gr", "1kg"]
-                  ).map((weight) => (
+              {product.variants?.length > 0 && (
+                <div className="flex flex-wrap gap-1 md:gap-2 my-2 w-full">
+                  {product.variants.map((v) => (
                     <button 
-                      key={weight}
+                      key={v.weight}
                       onClick={(e) => {
                         e.stopPropagation();
-                        setSelectedWeight(weight);
+                        setSelectedWeight(v.weight);
                       }}
                       className={cn(
-                        "py-1 text-[10px] md:text-xs font-bold rounded-md border transition-all whitespace-nowrap",
-                        selectedWeight === weight
+                        "py-1 px-2 text-[10px] md:text-xs font-bold rounded-md border transition-all whitespace-nowrap flex-1",
+                        selectedWeight === v.weight
                         ? "border-[#95b721] bg-[#95b721] text-white shadow-sm" 
                         : "border-gray-200 text-gray-500 hover:border-[#95b721] hover:text-[#95b721]"
                       )}
                     >
-                      {weight}
+                      {v.weight}
                     </button>
                   ))}
                 </div>
               )}
               <p className="text-xl md:text-3xl font-black text-[#95b721]">S/ {displayPrice}</p>
               
-              {showActions && (cartItem ? (
+              {cartItem ? (
                  <div className="flex items-center justify-between bg-gray-100 rounded-full p-1" onClick={(e) => e.stopPropagation()}>
                     <button 
                         onClick={handleDecrease}
@@ -119,9 +134,9 @@ function ProductCard({ product, showActions = false }) {
                     onClick={handleAddToCart}
                     className="w-full bg-black text-white font-bold py-2 rounded-xl text-xs md:text-sm hover:bg-gray-800 transition-colors"
                 >
-                    Añadir 
+                    Añadir
                 </button>
-              ))}
+              )}
           </div>
         </CardContent>
       </Card>
