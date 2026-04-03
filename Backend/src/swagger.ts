@@ -54,15 +54,6 @@ const options: swaggerJSDoc.Options = {
             createdAt: { type: 'string', format: 'date-time' },
           },
         },
-        CartItem: {
-          type: 'object',
-          properties: {
-            id: { type: 'integer' },
-            productId: { type: 'integer' },
-            quantity: { type: 'integer' },
-            product: { $ref: '#/components/schemas/Product' },
-          },
-        },
         Order: {
           type: 'object',
           properties: {
@@ -283,82 +274,6 @@ const options: swaggerJSDoc.Options = {
           security: [{ bearerAuth: [] }],
           responses: {
             200: { description: 'Lista de usuarios', content: { 'application/json': { schema: { type: 'array', items: { $ref: '#/components/schemas/User' } } } } },
-          },
-        },
-      },
-      // ── CART ──────────────────────────────────────────────────────────
-      '/api/cart': {
-        get: {
-          tags: ['Cart'],
-          summary: 'Obtener carrito del usuario autenticado',
-          security: [{ bearerAuth: [] }],
-          responses: {
-            200: { description: 'Carrito con items', content: { 'application/json': { schema: { type: 'object', properties: { items: { type: 'array', items: { $ref: '#/components/schemas/CartItem' } } } } } } },
-            401: { description: 'No autenticado' },
-          },
-        },
-        delete: {
-          tags: ['Cart'],
-          summary: 'Vaciar carrito del usuario',
-          security: [{ bearerAuth: [] }],
-          responses: {
-            200: { description: 'Carrito vaciado' },
-            401: { description: 'No autenticado' },
-          },
-        },
-      },
-      '/api/cart/add': {
-        post: {
-          tags: ['Cart'],
-          summary: 'Agregar item al carrito',
-          security: [{ bearerAuth: [] }],
-          requestBody: {
-            required: true,
-            content: {
-              'application/json': {
-                schema: {
-                  type: 'object',
-                  required: ['productId', 'quantity'],
-                  properties: {
-                    productId: { type: 'integer', example: 1 },
-                    quantity: { type: 'integer', example: 2 },
-                  },
-                },
-              },
-            },
-          },
-          responses: {
-            201: { description: 'Item agregado al carrito' },
-            400: { description: 'Datos requeridos faltantes' },
-            404: { description: 'Producto no encontrado' },
-          },
-        },
-      },
-      '/api/cart/item/{id}': {
-        put: {
-          tags: ['Cart'],
-          summary: 'Actualizar cantidad de item en el carrito',
-          security: [{ bearerAuth: [] }],
-          parameters: [{ name: 'id', in: 'path', required: true, schema: { type: 'integer' } }],
-          requestBody: {
-            required: true,
-            content: { 'application/json': { schema: { type: 'object', properties: { quantity: { type: 'integer', example: 3 } } } } },
-          },
-          responses: {
-            200: { description: 'Item actualizado' },
-            400: { description: 'ID o cantidad inválida' },
-            404: { description: 'Item no encontrado' },
-          },
-        },
-        delete: {
-          tags: ['Cart'],
-          summary: 'Eliminar item del carrito',
-          security: [{ bearerAuth: [] }],
-          parameters: [{ name: 'id', in: 'path', required: true, schema: { type: 'integer' } }],
-          responses: {
-            200: { description: 'Item eliminado' },
-            400: { description: 'ID inválido' },
-            404: { description: 'Item no encontrado' },
           },
         },
       },

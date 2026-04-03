@@ -17,7 +17,6 @@ import authRoutes from './routes/auth.route';
 import userRoutes from './routes/user.route';
 import uploadRoutes from './routes/upload.route';
 import stripeRoutes from './routes/stripe.route';
-import cartRoutes from './routes/cart.route';
 import orderRoutes from './routes/order.route';
 
 // Middlewares
@@ -31,7 +30,6 @@ app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/stripe', stripeRoutes);
-app.use('/api/cart', cartRoutes);
 app.use('/api/orders', orderRoutes);
 // Swagger Docs
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
