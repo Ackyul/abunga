@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { CopyPlus, Trash2 } from "lucide-react";
 import { Button } from "../../components/ui/button";
+import { toast } from "sonner";
 
 const CategoriesManager = () => {
     const [categories, setCategories] = useState([]);
@@ -49,21 +50,36 @@ const CategoriesManager = () => {
         }
     };
 
-    const handleDelete = async (id) => {
-        if (!window.confirm("¿Seguro que deseas eliminar esta categoría?")) return;
-        try {
-            const res = await fetch(`${apiUrl}/api/categories/${id}`, {
-                method: 'DELETE',
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+    const handleDelete = (id) => {
+        toast("¿Seguro que deseas eliminar esta categoría?", {
+            description: "Esta acción no se puede deshacer.",
+            action: {
+                label: "Sí, Eliminar",
+                onClick: async () => {
+                    try {
+                        const res = await fetch(`${apiUrl}/api/categories/${id}`, {
+                            method: 'DELETE',
+                            headers: {
+                                'Authorization': `Bearer ${localStorage.getItem('token')}`
+                            }
+                        });
+                        if (res.ok) {
+                            await fetchCategories();
+                            toast.success("Categoría eliminada exitosamente");
+                        } else {
+                            toast.error("Error al eliminar la categoría");
+                        }
+                    } catch(e) {
+                        console.error(e);
+                        toast.error("Hubo un error de conexión");
+                    }
                 }
-            });
-            if (res.ok) {
-                await fetchCategories();
-            }
-        } catch(e) {
-            console.error(e);
-        }
+            },
+            cancel: {
+                label: "Cancelar",
+            },
+            duration: 8000,
+        });
     };
 
     return (

@@ -91,21 +91,36 @@ const ProductsManager = () => {
         setVariants(p.variants || []);
     };
 
-    const handleDelete = async (id) => {
-        if (!window.confirm("¿Seguro que deseas eliminar este producto?")) return;
-        try {
-            const res = await fetch(`${apiUrl}/api/products/${id}`, {
-                method: 'DELETE',
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+    const handleDelete = (id) => {
+        toast("¿Seguro que deseas eliminar este producto?", {
+            description: "Esta acción eliminará el producto definitivamente.",
+            action: {
+                label: "Sí, Eliminar",
+                onClick: async () => {
+                    try {
+                        const res = await fetch(`${apiUrl}/api/products/${id}`, {
+                            method: 'DELETE',
+                            headers: {
+                                'Authorization': `Bearer ${localStorage.getItem('token')}`
+                            }
+                        });
+                        if (res.ok) {
+                            await fetchInitialData();
+                            toast.success("Producto eliminado exitosamente");
+                        } else {
+                            toast.error("Error al eliminar el producto");
+                        }
+                    } catch(e) {
+                        console.error(e);
+                        toast.error("Hubo un error de conexión");
+                    }
                 }
-            });
-            if (res.ok) {
-                await fetchInitialData();
-            }
-        } catch(e) {
-            console.error(e);
-        }
+            },
+            cancel: {
+                label: "Cancelar",
+            },
+            duration: 8000,
+        });
     };
 
     const addVariant = () => setVariants([...variants, { weight: "", price: "" }]);
