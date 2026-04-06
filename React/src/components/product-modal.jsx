@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { Dialog, DialogContent } from "./ui/dialog";
 import { cn } from "../lib/utils";
-import { Button } from "./ui/button";
-// import useCartStore from "../stores/useCartStore";
 
 export function ProductModal({ product, isOpen, onClose }) {
   const [selectedWeight, setSelectedWeight] = useState("50gr");
@@ -28,16 +26,6 @@ export function ProductModal({ product, isOpen, onClose }) {
 
   const displayPrice = getPrice();
 
-  // const handleAddToCart = () => {
-  //       addToCart({
-  //           id: product.id,
-  //           name: product.name,
-  //           image: product.image,
-  //           price: displayPrice,
-  //           brand: product.brand
-  //       }, 1, selectedWeight);
-  //       onClose(false);
-  // };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -92,7 +80,6 @@ export function ProductModal({ product, isOpen, onClose }) {
                 </div>
             </div>
             
-             {/* Button removed */}
 
         </div>
       </DialogContent>

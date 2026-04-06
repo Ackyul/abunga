@@ -13,10 +13,8 @@ export function SidebarFilters() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const { filters, setFilter, products } = useProductStore();
 
-  // Extraer tipos dinámicamente asegurando que sean únicos y no nulos
   const availableTypes = Array.from(new Set(products.map(p => p.tipo).filter(t => t && t !== "Mix"))).sort();
 
-  // Extraer frutas dinámicamente de los productos filtrados por tipo
   const availableFruits = Array.from(new Set(
     products
       .filter(p => filters.types.length === 0 || filters.types.includes(p.tipo))

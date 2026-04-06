@@ -8,14 +8,12 @@ const ProductsManager = () => {
     const [categories, setCategories] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     
-    // Form state
     const [name, setName] = useState("");
     const [price, setPrice] = useState("");
     const [fruta, setFruta] = useState("");
     const [img, setImg] = useState("");
     const [categoryId, setCategoryId] = useState("");
     
-    // Editing state
     const [editingId, setEditingId] = useState(null);
     const [isUploading, setIsUploading] = useState(false);
     const [variants, setVariants] = useState([]);

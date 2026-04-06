@@ -18,7 +18,7 @@ const Profile = () => {
        try {
          setUser(JSON.parse(localStorage.getItem("user") || "{}"));
        } catch {
-         // ignora error si el JSON es inválido
+         // ignora error JSON inválido
        }
     }
   }, []);

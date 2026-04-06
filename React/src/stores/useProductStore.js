@@ -18,16 +18,13 @@ const useProductStore = create((set, get) => ({
     set({ loading: true, error: null });
     try {
       let data = await fetchProducts();
-      // Shuffle products for variety
       for (let i = data.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [data[i], data[j]] = [data[j], data[i]];
       }
 
       data = data.map((p) => {
-        // Use category name as 'tipo' if available
         const tipo = p.category?.name || "Desconocido";
-        // Ensure image has a fallback
         const image = p.img || "/logo-abunga.png";
         
         return { ...p, tipo, image };

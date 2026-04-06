@@ -16,7 +16,6 @@ function Router() {
         <Route path="/cart" element={<Cart />} />
         <Route path="/profile" element={<Profile />} />
 
-        {/* Admin Routes */}
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={
             <div className="p-8">
