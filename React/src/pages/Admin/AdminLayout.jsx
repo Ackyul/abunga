@@ -29,7 +29,6 @@ const AdminLayout = () => {
 
     return (
         <div className="min-h-screen bg-gray-50 flex">
-            {/* Sidebar */}
             <aside className="w-64 bg-white border-r border-gray-200 shadow-sm flex flex-col shrink-0">
                 <div className="p-6 border-b border-gray-100 flex items-center gap-3">
                     <img src="/logo-abunga.png" alt="Logo" className="w-10 h-10 rounded-full" />
@@ -59,7 +58,6 @@ const AdminLayout = () => {
                 </div>
             </aside>
 
-            {/* Content area */}
             <main className="flex-1 overflow-auto">
                 <Outlet />
             </main>
