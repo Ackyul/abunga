@@ -41,7 +41,6 @@ export const syncProducts = async (productsData: any[]) => {
 };
 
 export const updateProduct = async (id: number, data: any) => {
-  // If editing category ID based on external input, ensure it is passed correctly.
   return await prisma.product.update({
     where: { id },
     data,
@@ -49,7 +48,35 @@ export const updateProduct = async (id: number, data: any) => {
 };
 
 export const deleteProduct = async (id: number) => {
-  return await prisma.product.delete({
-    where: { id },
+  return await prisma.$transaction(async (tx) => {
+    const affectedOrderItems = await tx.orderItem.findMany({
+      where: { productId: id },
+      select: { orderId: true },
+    });
+
+    const affectedOrderIds = [...new Set(affectedOrderItems.map((oi) => oi.orderId))];
+
+    await tx.orderItem.deleteMany({
+      where: { productId: id },
+    });
+
+    if (affectedOrderIds.length > 0) {
+      const ordersWithItems = await tx.orderItem.findMany({
+        where: { orderId: { in: affectedOrderIds } },
+        select: { orderId: true },
+      });
+      const orderIdsWithItems = new Set(ordersWithItems.map((oi) => oi.orderId));
+      const emptyOrderIds = affectedOrderIds.filter((oid) => !orderIdsWithItems.has(oid));
+
+      if (emptyOrderIds.length > 0) {
+        await tx.order.deleteMany({
+          where: { id: { in: emptyOrderIds } },
+        });
+      }
+    }
+
+    return await tx.product.delete({
+      where: { id },
+    });
   });
 };
