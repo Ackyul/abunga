@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { CopyPlus, Trash2, Pencil } from "lucide-react";
 import { Button } from "../../components/ui/button";
 import { toast } from "sonner";
+import { ConfirmDeleteDialog } from "../../components/ConfirmDeleteDialog";
 
 const ProductsManager = () => {
     const [products, setProducts] = useState([]);
@@ -17,6 +18,10 @@ const ProductsManager = () => {
     const [editingId, setEditingId] = useState(null);
     const [isUploading, setIsUploading] = useState(false);
     const [variants, setVariants] = useState([]);
+
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+    const [productToDelete, setProductToDelete] = useState(null);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
@@ -91,36 +96,35 @@ const ProductsManager = () => {
         setVariants(p.variants || []);
     };
 
-    const handleDelete = (id) => {
-        toast("¿Seguro que deseas eliminar este producto?", {
-            description: "Esta acción eliminará el producto definitivamente.",
-            action: {
-                label: "Sí, Eliminar",
-                onClick: async () => {
-                    try {
-                        const res = await fetch(`${apiUrl}/api/products/${id}`, {
-                            method: 'DELETE',
-                            headers: {
-                                'Authorization': `Bearer ${localStorage.getItem('token')}`
-                            }
-                        });
-                        if (res.ok) {
-                            await fetchInitialData();
-                            toast.success("Producto eliminado exitosamente");
-                        } else {
-                            toast.error("Error al eliminar el producto");
-                        }
-                    } catch(e) {
-                        console.error(e);
-                        toast.error("Hubo un error de conexión");
-                    }
+    const requestDelete = (product) => {
+        setProductToDelete(product);
+        setDeleteDialogOpen(true);
+    };
+
+    const confirmDelete = async () => {
+        if (!productToDelete) return;
+        setIsDeleting(true);
+        try {
+            const res = await fetch(`${apiUrl}/api/products/${productToDelete.id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
-            },
-            cancel: {
-                label: "Cancelar",
-            },
-            duration: 8000,
-        });
+            });
+            if (res.ok) {
+                await fetchInitialData();
+                toast.success("Producto eliminado exitosamente");
+            } else {
+                toast.error("Error al eliminar el producto");
+            }
+        } catch(e) {
+            console.error(e);
+            toast.error("Hubo un error de conexión");
+        } finally {
+            setIsDeleting(false);
+            setDeleteDialogOpen(false);
+            setProductToDelete(null);
+        }
     };
 
     const addVariant = () => setVariants([...variants, { weight: "", price: "" }]);
@@ -256,7 +260,7 @@ const ProductsManager = () => {
                                     <button onClick={() => handleEdit(p)} className="text-blue-500 hover:bg-blue-50 p-2 rounded-lg transition-colors mr-2">
                                         <Pencil size={20} />
                                     </button>
-                                    <button onClick={() => handleDelete(p.id)} className="text-red-500 hover:bg-red-50 p-2 rounded-lg transition-colors">
+                                    <button onClick={() => requestDelete(p)} className="text-red-500 hover:bg-red-50 p-2 rounded-lg transition-colors">
                                         <Trash2 size={20} />
                                     </button>
                                 </td>
@@ -265,6 +269,15 @@ const ProductsManager = () => {
                     </tbody>
                 </table>
             </div>
+            
+            <ConfirmDeleteDialog 
+                open={deleteDialogOpen} 
+                onOpenChange={setDeleteDialogOpen}
+                title="¿Eliminar producto?"
+                description={productToDelete ? `¿Estás seguro que deseas eliminar "${productToDelete.name}"? Esta acción no se puede deshacer y borrará el producto de la tienda.` : ""}
+                onConfirm={confirmDelete}
+                isDeleting={isDeleting}
+            />
         </div>
     );
 };

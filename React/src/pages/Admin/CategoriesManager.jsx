@@ -2,11 +2,16 @@ import { useState, useEffect } from "react";
 import { CopyPlus, Trash2 } from "lucide-react";
 import { Button } from "../../components/ui/button";
 import { toast } from "sonner";
+import { ConfirmDeleteDialog } from "../../components/ConfirmDeleteDialog";
 
 const CategoriesManager = () => {
     const [categories, setCategories] = useState([]);
     const [name, setName] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+    const [categoryToDelete, setCategoryToDelete] = useState(null);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
@@ -50,36 +55,35 @@ const CategoriesManager = () => {
         }
     };
 
-    const handleDelete = (id) => {
-        toast("¿Seguro que deseas eliminar esta categoría?", {
-            description: "Esta acción no se puede deshacer.",
-            action: {
-                label: "Sí, Eliminar",
-                onClick: async () => {
-                    try {
-                        const res = await fetch(`${apiUrl}/api/categories/${id}`, {
-                            method: 'DELETE',
-                            headers: {
-                                'Authorization': `Bearer ${localStorage.getItem('token')}`
-                            }
-                        });
-                        if (res.ok) {
-                            await fetchCategories();
-                            toast.success("Categoría eliminada exitosamente");
-                        } else {
-                            toast.error("Error al eliminar la categoría");
-                        }
-                    } catch(e) {
-                        console.error(e);
-                        toast.error("Hubo un error de conexión");
-                    }
+    const requestDelete = (cat) => {
+        setCategoryToDelete(cat);
+        setDeleteDialogOpen(true);
+    };
+
+    const confirmDelete = async () => {
+        if (!categoryToDelete) return;
+        setIsDeleting(true);
+        try {
+            const res = await fetch(`${apiUrl}/api/categories/${categoryToDelete.id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
-            },
-            cancel: {
-                label: "Cancelar",
-            },
-            duration: 8000,
-        });
+            });
+            if (res.ok) {
+                await fetchCategories();
+                toast.success("Categoría eliminada exitosamente");
+            } else {
+                toast.error("Error al eliminar la categoría");
+            }
+        } catch(e) {
+            console.error(e);
+            toast.error("Hubo un error de conexión");
+        } finally {
+            setIsDeleting(false);
+            setDeleteDialogOpen(false);
+            setCategoryToDelete(null);
+        }
     };
 
     return (
@@ -119,7 +123,7 @@ const CategoriesManager = () => {
                                 <td className="px-6 py-4 font-medium text-gray-800">{c.name}</td>
                                 <td className="px-6 py-4 text-right">
                                     <button 
-                                        onClick={() => handleDelete(c.id)}
+                                        onClick={() => requestDelete(c)}
                                         className="text-red-500 hover:bg-red-50 p-2 rounded-lg transition-colors"
                                     >
                                         <Trash2 size={20} />
@@ -137,6 +141,15 @@ const CategoriesManager = () => {
                     </tbody>
                 </table>
             </div>
+
+            <ConfirmDeleteDialog 
+                open={deleteDialogOpen} 
+                onOpenChange={setDeleteDialogOpen}
+                title="¿Eliminar categoría?"
+                description={categoryToDelete ? `¿Estás seguro que deseas eliminar la categoría "${categoryToDelete.name}"? Los productos que la tengan podrían verse afectados.` : ""}
+                onConfirm={confirmDelete}
+                isDeleting={isDeleting}
+            />
         </div>
     );
 };
