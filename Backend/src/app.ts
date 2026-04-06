@@ -8,7 +8,7 @@ import { swaggerSpec } from './swagger';
 dotenv.config();
 
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 3001;
 
 // Routes
 import categoryRoutes from './routes/category.route';
@@ -31,10 +31,9 @@ app.use('/api/users', userRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/stripe', stripeRoutes);
 app.use('/api/orders', orderRoutes);
-// Swagger Docs
+// Swagger
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-// Main Route Check
 app.get('/api', (req, res) => {
   res.json({ message: 'Bienvenido a la API del E-commerce' });
 });

@@ -327,38 +327,15 @@ const options: swaggerJSDoc.Options = {
         },
       },
       // ── STRIPE ────────────────────────────────────────────────────────
-      '/api/stripe/checkout': {
-        post: {
+      '/api/stripe/checkout/{orderId}': {
+        get: {
           tags: ['Stripe'],
-          summary: 'Crear sesión de pago en Stripe',
-          requestBody: {
-            required: true,
-            content: {
-              'application/json': {
-                schema: {
-                  type: 'object',
-                  required: ['cartItems'],
-                  properties: {
-                    cartItems: {
-                      type: 'array',
-                      items: {
-                        type: 'object',
-                        properties: {
-                          name: { type: 'string' },
-                          price: { type: 'number' },
-                          quantity: { type: 'integer' },
-                          selectedWeight: { type: 'string' },
-                        },
-                      },
-                    },
-                  },
-                },
-              },
-            },
-          },
+          summary: 'Obtener link de pago Stripe por ID de orden',
+          parameters: [{ name: 'orderId', in: 'path', required: true, schema: { type: 'integer' }, description: 'ID de la orden creada' }],
           responses: {
-            200: { description: 'URL de sesión Stripe', content: { 'application/json': { schema: { type: 'object', properties: { id: { type: 'string' }, url: { type: 'string' } } } } } },
-            400: { description: 'Carrito vacío' },
+            200: { description: 'URL de pago de Stripe', content: { 'application/json': { schema: { type: 'object', properties: { id: { type: 'string' }, url: { type: 'string' } } } } } },
+            400: { description: 'ID inválido o orden sin items' },
+            500: { description: 'Orden no encontrada o error de Stripe' },
           },
         },
       },

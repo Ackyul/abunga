@@ -1,20 +1,21 @@
 import { Request, Response } from 'express';
-import { createCheckoutSessionService } from '../services/stripe.service';
+import { createCheckoutSessionByOrderId } from '../services/stripe.service';
 
-export const createCheckoutSession = async (req: Request, res: Response) => {
+
+export const checkoutByOrderId = async (req: Request, res: Response) => {
   try {
-    const { cartItems } = req.body;
-    if (!cartItems || cartItems.length === 0) {
-      res.status(400).json({ error: 'Cart is empty' });
+    const orderId = parseInt(req.params.orderId as string);
+    if (isNaN(orderId)) {
+      res.status(400).json({ error: 'ID de orden inválido' });
       return;
     }
 
-    const origin = req.headers.origin || 'http://localhost:5173';
-    const session = await createCheckoutSessionService(cartItems, origin);
+    const origin = (req.headers.origin as string) || process.env.FRONTEND_URL || '';
+    const session = await createCheckoutSessionByOrderId(orderId, origin);
 
     res.status(200).json({ id: session.id, url: session.url });
   } catch (error: any) {
-    console.error('Error creating checkout session:', error);
+    console.error('Error creating checkout by order:', error);
     res.status(500).json({ error: error.message });
   }
 };
