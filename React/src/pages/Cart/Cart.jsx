@@ -1,6 +1,6 @@
 import Footer from "../../components/footer";
 import useCartStore from "../../stores/useCartStore";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Trash2 } from "lucide-react";
 import { Button } from "../../components/ui/button";
 import { Navbar } from "../../components/navbar";
@@ -10,45 +10,62 @@ import { toast } from "sonner";
 const Cart = () => {
     const { cart, removeFromCart, updateQuantity, getTotalPrice, clearCart } = useCartStore();
     const [isCheckingOut, setIsCheckingOut] = useState(false);
+    const navigate = useNavigate();
 
     const handleCheckout = async () => {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            toast.error("Debes iniciar sesión para realizar la compra");
+            navigate("/profile");
+            return;
+        }
+
         setIsCheckingOut(true);
         try {
             const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
-            const response = await fetch(`${apiUrl}/api/stripe/checkout`, {
+            
+            // 1. Crear el pedido en el backend
+            const orderResponse = await fetch(`${apiUrl}/api/orders`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify({ cartItems: cart })
             });
 
-            const data = await response.json();
+            if (!orderResponse.ok) {
+                const errorData = await orderResponse.json();
+                throw new Error(errorData.error || "Error al crear el pedido");
+            }
 
-            if (data.url) {
-                const token = localStorage.getItem("token");
-                if (token) {
-                    try {
-                        await fetch(`${apiUrl}/api/orders`, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'Authorization': `Bearer ${token}`
-                            },
-                            body: JSON.stringify({ cartItems: cart })
-                        });
-                    } catch {
-                        // stripe
-                    }
+            const orderData = await orderResponse.json();
+            const orderId = orderData.order.id;
+
+            // 2. Obtener el link de pago de Stripe usando el ID de la orden
+            const stripeResponse = await fetch(`${apiUrl}/api/stripe/checkout/${orderId}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
                 }
+            });
+
+            if (!stripeResponse.ok) {
+                const errorData = await stripeResponse.json();
+                throw new Error(errorData.error || "Error al obtener link de Stripe");
+            }
+
+            const stripeData = await stripeResponse.json();
+
+            if (stripeData.url) {
                 clearCart();
-                window.location.href = data.url;
+                window.location.href = stripeData.url;
             } else {
                 throw new Error("No se pudo iniciar la sesión de Stripe");
             }
         } catch (error) {
             console.error("Error al procesar pago:", error);
-            toast.error("Hubo un error al procesar tu pago. Inténtalo de nuevo.");
+            toast.error(error.message || "Hubo un error al procesar tu pago. Inténtalo de nuevo.");
             setIsCheckingOut(false);
         }
     };
